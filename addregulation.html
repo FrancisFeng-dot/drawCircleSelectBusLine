@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title></title>
+    <!-- <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet"> -->
+    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=fadmfySZ6imLdOmqQbCgfMtSN36jo2Q1"></script>
+    <!--加载鼠标绘制工具-->
+    <script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+    <!--加载检索信息窗口-->
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
+    <style>
+        dl,dt,dd,ul,li{
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+        dt{
+            font-size:14px;
+            font-family:"微软雅黑";
+            font-weight:bold;
+            border-bottom:1px dotted #000;
+            padding:5px 0 5px 5px;
+            margin:5px 0;
+        }
+        dd{
+            padding:5px 0 0 5px;
+        }
+    </style>
+</head>
+<body style="box-sizing: border-box;padding: 12px 48px;">
+<div style="width: 100%;height: 100%;color: #333333;">
+    <!-- toubu -->
+    <div style="margin-left: -24px;">
+        <span style="font-size: 24px;font-weight: 600;">新增分段限速</span>
+    </div>
+    <!-- toubu -->
+    <!-- mingcheng -->
+    <div style="margin-top: 4vh;">
+        <div>
+            <span style="color:red;width: 0.4vw;">*</span>
+            <span style="margin-right: 2vw;">规则名称</span>
+            <input placeholder="限输入20字" style="width: 21vw;height: 3vh;line-height: 3vh;border: 1px solid rgba(228,228,228,1);border-radius: 2px;">
+            <span style="color: #999999;">（*为必填项）</span>
+        </div>
+        <div style="display: flex;margin-top: 20px;margin-left:0.4vw;">
+            <span style="margin-right: 2.3vw;">规则描述</span>
+            <textarea name="" style="width: 21vw;height: 10vh;border:1px solid rgba(228,228,228,1);border-radius: 2px;"></textarea>
+        </div>
+    </div>
+    <!-- mingcheng -->
+    <!-- guize -->
+    <div style="display: flex;margin-top:2vh;">
+        <span style="color:red;width: 0.4vw;">*</span>
+        <span style="margin-right: 56px;">分段速度设置</span>
+        <div style="position:relative;">
+            <!--这是地图-->
+            <div id="l-map" style="width: 55vw;height: 50vh;"></div>
+            <!--这是地图-->
+            <!--这是公交列表-->
+            <div style="position: absolute;top: 20px;right: 178px;">
+                <input id="busRouteQuery" placeholder="请输入公交线路" style="width: 140px;height: 22px;padding: 0;font-size: 0.9em;">
+                <div id="searchimg" style="width: 28px;float: right;height: 26px;background: #FA9B43;cursor: pointer;">
+                    <img src="./images/search2.png" style="width: 100%;height: 100%;">
+                </div>
+            </div>
+            <div id="result" style="position:absolute;bottom:0;right:0;">
+                <input type="button" value="清除所有覆盖物" onclick="clearAll()"/>
+            </div>
+            <!--这是公交列表-->
+        </div>
+        <div id="results" style="display: none;"></div>
+        <div style="width: 14vw;height: 50vh;margin-left: 1vw;position: relative;">
+            <ul class="stationlist" id="stationlist">
+
+            </ul>
+            <div style="color:#666666;position:absolute;bottom:0;padding: 1vh 1vw 1vh;border: 1px solid rgba(215, 215, 215, 1);box-shadow: 1px 2px 3px rgba(153, 153, 153, 0.349019607843137);-moz-box-shadow: 1px 2px 3px rgba(153, 153, 153, 0.349019607843137);-webkit-box-shadow: 1px 2px 3px rgba(153, 153, 153, 0.349019607843137);font-size: 0.8em;">
+                <div style="display: flex;"><img src="./images/help.png" alt="" style="margin-left: -0.7vw;width: 0.8vw;height: 1.6vh;">帮助</div>
+                <div>1.在地图左上角定位城市，输入站台名搜索；</div>
+                <div>2.通过站台名选择所需公交路线；</div>
+                <div>3.在地图上选择需要限速的段落，输入速度。</div>
+            </div>
+        </div>
+    </div>
+    <!-- guize -->
+    <!-- baocun -->
+    <div style="font-family: 'PingFangSC-Regular', 'PingFang SC';font-weight: 400;">
+        <button type="" id="commitRule" style="width: 140px;height: 40px;border: none;border-radius: 5px;box-shadow: 1px 2px 3px rgba(153, 153, 153, 0.349019607843137);color: #fff;background: inherit;background-color: rgba(250, 155, 67, 1);cursor: pointer;margin-left: 144px;margin-top: 3vh;">保存</button>
+        <a href="./regulationlist.html" title=""><button type="" style="width: 140px;height: 40px;border: none;border-radius: 5px;box-shadow: 1px 2px 3px rgba(153, 153, 153, 0.349019607843137);color: #169BD5;background: #fff;cursor: pointer;margin-top: 3vh;margin-left: 18px;">取消</button></a>
+    </div>
+    <!-- baocun -->
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    document.getElementById("stationlist").addEventListener("click",function(event){
+        if(event.target.tagName=='BUTTON'){
+            console.log(event)
+            var index = [].indexOf.call(event.target.parentNode.parentNode.parentNode.querySelectorAll('li'),event.target.parentNode.parentNode);//获取当前li标签位置
+            document.getElementById("stationlist")['children'][index].remove();
+        }
+    },false);
+    document.getElementById("commitRule").addEventListener("click",function(event){
+        var stationlist = document.getElementById("stationlist")['children'];
+        if(stationlist.length>0){
+            var result = [];
+            for(var i=0;i<stationlist.length;i++){
+                var enable;
+                if(stationlist[i]['children'][0]['children'][2]['children'][0].innerHTML=='允许鸣笛'){
+                    enable = true;
+                }
+                if(stationlist[i]['children'][0]['children'][2]['children'][0].innerHTML=='禁止鸣笛'){
+                    enable = false;
+                }
+                result.push({
+                    'yuandian':[stationlist[i].getAttribute('lng'),stationlist[i].getAttribute('lat')],
+                    'radius':stationlist[i].getAttribute('radius')+'米',
+                    'speed':stationlist[i]['children'][0]['children'][1]['children'][1].innerHTML,
+                    'enable':enable});
+            }
+            console.log(result);
+        }
+    },false);
+    //百度地图API功能
+    var map = new BMap.Map("l-map");// 创建Map实例
+    var city = '深圳';//默认是深圳市
+    map.centerAndZoom(city, 12);
+    var size = new BMap.Size(10, 20);
+    map.addControl(new BMap.CityListControl({
+        anchor: BMAP_ANCHOR_TOP_LEFT,
+        offset: size
+    }));
+    map.enableScrollWheelZoom(true);//地图可以用鼠标滚轮控制缩放
+    map.enableInertialDragging(true);//启用地图惯性拖拽
+    map.enableContinuousZoom(true);//启用连续缩放效果
+    //输入公交线路获取内容
+    document.getElementById('searchimg').addEventListener('click',function(event) {
+        var busName = document.getElementById('busRouteQuery').value;
+        if(busName){
+            busSearch(busName);
+        }
+    });
+    //输入公交线路获取内容
+    var tempVar;//记录初始站台信息列表
+    var stations;//记录站台信息列表
+    var busline = new BMap.BusLineSearch(map,{
+        renderOptions:{
+            map:map,
+            panel:"results"
+        },
+        onGetBusListComplete: function(result){
+            if(result) {
+                tempVar = result;
+                var fstLine = result.getBusListItem(0);//获取第一个公交列表显示到map上
+                busline.getBusLine(fstLine);
+            }
+        },
+        onBusLineHtmlSet: function(){
+            try{
+                getCoordinate(tempVar);
+            }catch(e){
+            }
+        }
+    });
+    function busSearch(busName){
+        busline.getBusList(busName);
+    }
+    //注释公交站台功能
+    function getCoordinate(result){
+        stations = result['0']['BB'];
+        setTimeout(function(){
+            for(var i in stations){
+                //获取覆盖物位置
+                var point = new BMap.Point(stations[i]['position']['lng'],stations[i]['position']['lat']);
+                var opts = {
+                    position:point,
+                    offset:new BMap.Size(-4,-37)
+                }
+                var opts2 = {
+                    position:point,
+                    offset:new BMap.Size(0,-15)
+                }
+                var label = new BMap.Label(stations[i]['name'],opts);
+                label.setStyle({
+                    fontSize:"12px",
+                    height:"20px",
+                    lineHeight:"20px",
+                    fontFamily:"微软雅黑",
+                    background:"#FFFFDF",
+                    border:"0"
+                });
+                var arrow = new BMap.Label('',opts2);
+                arrow.setStyle({
+                    width:"0",
+                    height:"0",
+                    border:"0",
+                    background:"transparent",
+                    overflow:"hidden",
+                    padding:"0",
+                    'border-top':"10px solid #FFFFDF",
+                    'border-right':"10px solid transparent"
+                });
+                map.addOverlay(label);              // 将标注添加到地图中
+                map.addOverlay(arrow);
+            }
+        },1);
+    }
+    //绘制圆
+    var overlays = [];
+    var start,end;
+    var yuandian;//原点
+    var radius;//半径
+    var pointgather;
+    var overlaycomplete = function(e){
+        overlays.push(e.overlay);
+        if(stations){
+            start = 0;
+            end = stations.length-1;
+            pointgather = [];
+            yuandian = e.overlay.point;
+            radius = e.overlay.getRadius();
+            var changdustart = map.getDistance(yuandian,stations[start]['position']);
+            var changduend = map.getDistance(yuandian,stations[end]['position']);
+            zheban(changdustart,changduend,start,end);
+            console.log(pointgather[0])//圆范围内站台开始
+            console.log(pointgather[pointgather.length-1])//圆范围内站台结束
+            //添加弹框
+            var marker = new BMap.Marker(yuandian);  // 创建标注
+            map.addOverlay(marker);              // 将标注添加到地图中
+            map.centerAndZoom(yuandian, 15);
+            var opts = {
+                width : 200,     // 信息窗口宽度
+                height: 106,     // 信息窗口高度
+                background:'#fff',
+                title : "请输入限制速度" , // 信息窗口标题
+                enableMessage:true,//设置允许信息窗发送短息
+                enableAutoPan: true
+            }
+            var speedlimit = ["<input id=\"ratelimit\" style=\"width: 27px; height: 27px; float: left;\">",
+                "<div style=\"float: left;\">km/h</div>",
+                "<div style=\"clear:  both;\"><span>可以鸣笛</span>",
+                "<input type=\"radio\" name=\"vehicle\" id=\"allowwhistle\" checked=\"checked\"><label for=\"allowwhistle\">是</label>",
+                "<input type=\"radio\" name=\"vehicle\" id=\"unallowwhistle\"><label for=\"unallowwhistle\">否</label></div>",
+                "<div style=\"width: 24px; height: 24px; background: rgb(250, 155, 67); cursor: pointer; float: right;\">",
+                "<img id=\"pushrighthand\" src=\"./images/rightjiantou.png\">",
+                "</div>",
+                "</div>"];
+            var infoWindow = new BMap.InfoWindow(speedlimit.join(""), opts);  // 创建信息窗口对象
+            setTimeout(function(){
+                map.openInfoWindow(infoWindow,yuandian); //开启信息窗口
+                document.getElementById('pushrighthand').addEventListener("click", function(event){
+                    if(document.getElementById('ratelimit').value){
+                        var li  = document.createElement("li");
+                        li.setAttribute('lng',yuandian['lng']);
+                        li.setAttribute('lat',yuandian['lat']);
+                        li.setAttribute('radius',radius);
+                        var div1  = document.createElement("div");
+                        var zidiv1  = document.createElement("div");
+                        var span1  = document.createElement("span");
+                        span1.innerHTML = stations[pointgather[0]]['name'];
+//                        span1.setAttribute('lng',stations[pointgather[0]]['position']['lng']);
+//                        span1.setAttribute('lat',stations[pointgather[0]]['position']['lat']);
+                        var span2  = document.createElement("span");
+                        span2.innerHTML = '---->';
+                        var span3  = document.createElement("span");
+                        span3.innerHTML = stations[pointgather[pointgather.length-1]]['name'];
+//                        span3.setAttribute('lng',stations[pointgather[pointgather.length-1]]['position']['lng']);
+//                        span3.setAttribute('lat',stations[pointgather[pointgather.length-1]]['position']['lat']);
+                        zidiv1.append(span1);
+                        zidiv1.append(span2);
+                        zidiv1.append(span3);
+                        var zidiv2  = document.createElement("div");
+                        var span4  = document.createElement("span");
+                        span4.innerHTML = '限速：';
+                        var span5  = document.createElement("span");
+                        span5.innerHTML = document.getElementById('ratelimit').value;
+                        var span6  = document.createElement("span");
+                        span6.innerHTML = 'km/h';
+                        zidiv2.append(span4);
+                        zidiv2.append(span5);
+                        zidiv2.append(span6);
+                        var zidiv3  = document.createElement("div");
+                        var span7  = document.createElement("span");
+                        if(document.getElementById('allowwhistle').checked==true){
+                            span7.innerHTML = '允许鸣笛';
+                        }
+                        if(document.getElementById('unallowwhistle').checked==true){
+                            span7.innerHTML = '禁止鸣笛';
+                        }
+                        zidiv3.append(span7);
+                        div1.append(zidiv1);
+                        div1.append(zidiv2);
+                        div1.append(zidiv3);
+                        var div2  = document.createElement("div");
+                        var button  = document.createElement("button");
+                        button.innerHTML = '-';
+                        div2.append(button);
+                        li.appendChild(div1);
+                        li.appendChild(div2);
+                        document.getElementById('stationlist').append(li);
+                    }
+                });
+            },1);
+            //添加弹框
+        }
+    };
+    function zheban(changdustart,changduend,start,end) {
+        if(((end-start)/2)>=1){
+            if(changdustart>changduend){
+                start = parseInt((start+end)/2);
+                changdustart = map.getDistance(yuandian,stations[start]['position']);
+                zheban(changdustart,changduend,start,end);
+            }else{
+                end = parseInt((start+end)/2);
+                changduend = map.getDistance(yuandian,stations[end]['position']);
+                zheban(changdustart,changduend,start,end);
+            }//折半查找
+        }else{
+            pointgather.push(start,end);//先推送靠近原点的两个点
+            console.log(pointgather);
+            forwardstart(start);
+            backfind(end);
+        }
+    }
+    function forwardstart(start) {
+        if(start>0){
+            start = start-1;
+            var goonstart = map.getDistance(yuandian,stations[start]['position']);
+            if(goonstart<radius){
+                pointgather.unshift(start);
+                forwardstart(start);
+            }
+        }
+    }//向前查找点
+    function backfind(end){
+        if(end<stations.length-1){
+            end = end+1;
+            var goonend = map.getDistance(yuandian,stations[end]['position']);
+            if(goonend<radius){
+                pointgather.push(end);
+                backfind(end);
+            }
+        }
+    }//向后查找点
+    //绘制圆
+    //注释功能
+    var styleOptions = {
+        strokeColor:"#EDA89C",    //边线颜色。
+        fillColor:"#EDA89C",      //填充颜色。当参数为空时，圆形将没有填充效果。
+        strokeWeight: 1,       //边线的宽度，以像素为单位。
+        strokeOpacity: 0.5,	   //边线透明度，取值范围0 - 1。
+        fillOpacity: 0.5,      //填充的透明度，取值范围0 - 1。
+        strokeStyle: 'solid' //边线的样式，solid或dashed。
+    }
+    //实例化鼠标绘制工具
+    var drawingManager = new BMapLib.DrawingManager(map, {
+        isOpen: false, //是否开启绘制模式
+        enableDrawingTool: true, //是否显示工具栏
+        drawingToolOptions: {
+            anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+            offset: new BMap.Size(5, 5), //偏离值
+            drawingModes : [ BMAP_DRAWING_CIRCLE],
+            drawingTypes : [
+                BMAP_DRAWING_CIRCLE//圆的样式
+            ]
+        },
+        circleOptions: styleOptions //圆的样式
+    });
+    //添加鼠标绘制工具监听事件，用于获取绘制结果
+    drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+    function clearAll() {
+        for(var i = 0; i < overlays.length; i++){
+            map.removeOverlay(overlays[i]);
+        }
+        overlays.length = 0
+    }
+
+</script>

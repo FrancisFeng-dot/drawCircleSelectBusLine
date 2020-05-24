@@ -1,0 +1,252 @@
+body{
+    background:#eeeeee;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    /*line-height: 1.42857143;*/
+    color: #333;
+    margin: 0 auto;
+}
+body,html{
+    height:100%;
+    width:100%;
+    overflow:hidden;
+}
+ul{
+    margin: 0;
+    padding: 0;
+}
+.page{
+    height: 26px;
+    padding-top: 10px;
+    width: 100%;
+    background: #162840;
+}
+.sonpage{
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+    border-bottom:26px solid #8d97b0;
+    width:142px;height: 26px;
+    border-top-left-radius: 12px;
+    border-top-right-radius:12px;
+    text-align: center;
+    line-height: 26px;
+    box-sizing: border-box;
+}
+.bb_26{border-bottom:26px solid #efefef;}
+.cl_169{color:#169BD8;}
+.cl_fff{color:#ffffff;}
+.fs_12{font-size:12px;}
+.fs_24{font-size:24px;}
+.fw_6{font-weight: 600;}
+.mg_auto{margin: 0 auto;}
+.ml_f14{
+    margin-left: -14px;
+}
+.ml_2{
+    margin-left: 2px;
+}
+.ml_8{
+    margin-left: 8px;
+}
+.ml_10{
+    margin-left:10px;
+}
+.ml_42{margin-left:42px;}
+.mr_6{
+    margin-right: 6px;
+}
+.mr_9{
+    margin-right:9px;
+}
+.mt_20{
+    margin-top:20px;
+}
+.mg_3001{
+    margin:30px 0 0 15px;
+}
+.headpage{
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    background: #364860;
+    color:#f5ffff;
+}
+.pingtai{
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 16px;
+}
+.phone{
+    width: 121px;
+    text-align: center;
+}
+.plate{
+    width: 282px;
+    border-left:1px solid #283851;
+    border-right: 1px solid #283851;
+    text-align: center;
+}
+.plateinput{
+    height: 19px;
+    width: 160px;
+    margin-right: -5px;margin-left:8px;
+}
+.platebutton{
+    height: 25px;
+    width: 28px;
+    line-height: 23px;
+    background: white;
+    color: #575350;
+    border: none;border-left: 1px solid #464749;
+}
+.platebutton{
+    cursor:pointer;
+}
+.pd_3014{padding: 30px 14px;}
+.w_24{
+    width:24%;
+    margin-left: 2%;
+}
+.w_15{
+    width:15%;
+}
+.w_25{
+    width:25%;
+}
+.w_35{
+    width:35%;
+}
+.w_40{
+    width: 40%;
+}
+.w_60{
+    width: 60%;
+}
+.w_72{
+    width:72%;
+}
+.w_75{
+    width:75%;
+}
+.w_90{
+    width:90%;
+}
+.w_100{
+    width:100%;
+}
+.h_120{
+    height:120px;
+}
+.h_100{
+    height:100%;
+}
+.clb{
+    clear:both;
+}
+.fl{
+    float:left;
+}
+.fr{
+    float:right;
+}
+.fangwei{
+    margin-top: 5px;
+    float:right;
+}
+.head > td{
+    border-bottom: 1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    height: 28px;
+    line-height: 28px;
+    padding: 10px 0;
+    text-align: center;
+}
+.tablebody > tr{background: #fff;}
+.tablebody > tr:hover{background: #F9F9F9;cursor: pointer;}
+.tablebody > tr > td{
+    border-bottom: 1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    height: 16px;
+    line-height: 16px;
+    padding: 10px 0;
+    text-align: center;
+}
+.footer{
+    height: 25px;
+    width: 100%;
+    position: absolute;
+    border-top: 3px solid #D6DBE7;
+    bottom: 0;
+}
+.notice{
+    width: 104px;
+    height: 25px;
+    background: #ea1e4f;
+    position: absolute;
+    right: 0;
+    font-size: 12px;
+    line-height: 25px;
+    z-index: 102;
+    top: -4px;text-align: center;
+}
+.bodytable{
+    width: 100%;
+    border-collapse: collapse;
+    border-right: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+}
+.regulation{
+    float:right;
+    background: #FA9B43;
+    color:#fff;
+    border: 0;
+    width: 140px;
+    height: 40px;
+    border-radius: 6px;
+    margin-right: 60px;
+    cursor: pointer;
+}
+.zhuti{
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+}
+.stationlist{
+    list-style: none;
+    box-shadow: 1px 2px 3px rgba(153, 153, 153, 0.349019607843137);
+    -moz-box-shadow: 1px 2px 3px rgba(153, 153, 153, 0.349019607843137);
+    -webkit-box-shadow: 1px 2px 3px rgba(153, 153, 153, 0.3490196078431);
+    position: absolute;
+    overflow: scroll;
+    height: 27vh;
+    width: 100%;
+}
+.stationlist > li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 12vh;
+    line-height: 3vh;
+    padding: 0 0.5vw;
+    border: 1px solid rgba(215, 215, 215, 1);
+    border-bottom: 0px;
+    position: relative;
+}
+.stationlist > li > div:nth-child(2){
+    position: absolute;
+    right: 1vh;
+}
+.stationlist > li > div:nth-child(2) > button {
+    width:1.6em;
+    height:1.6em;
+    border-radius: 50%;
+    border:1px solid #ACACAC;
+    cursor: pointer;
+}
+.stationlist > li > div:nth-child(1) > div:nth-child(1) {
+    font-size:0.9em;
+}
+.stationlist > li > div:nth-child(1) > div:nth-child(2) {
+    font-size:1.2em;
+}
