@@ -1,0 +1,79 @@
+ <span style="font-family:MicrosoftYaHei;font-size:0.24rem;color:#FF6D33;" onclick="getLocation()">自动定位</span>
+
+<div class="bags" id="poislist" style="width: 6rem;height: 7rem;padding: 0;">
+        <img src="https://qmzgcdn.boc7.net/jifen/index/img/close1.png" alt="" class="closepos" onclick="closeadslist()">
+        <span style="font-family: 'SourceHanSansCN-Medium';font-size: 0.32rem;color:#333333;height: 0.9rem;line-height: 0.9rem;">根据定位获取附近地址</span>
+        <ul class="poisdetail_list">
+            <!-- <li>
+                <div>
+                    <span>新能源大厦A座</span>
+                    <span>广东省深圳市南山区新能源大厦A座</span>
+                </div>
+                <img src="https://qmzgcdn.boc7.net/jifen/index/img/listicon_in.png" alt="">
+            </li> -->
+        </ul>
+    </div>
+<script>
+function getLocation() {
+   if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition, showError);
+   } else {
+      alert("浏览器不支持地理定位。");
+   }
+}
+
+function showError(error) {
+   switch (error.code) {
+      case error.PERMISSION_DENIED:
+         alert("定位失败,用户拒绝请求地理定位");
+         break;
+      case error.POSITION_UNAVAILABLE:
+         alert("定位失败,位置信息是不可用");
+         break;
+      case error.TIMEOUT:
+         alert("定位失败,请求获取用户位置超时");
+         break;
+      case error.UNKNOWN_ERROR:
+         alert("定位失败,定位系统失效");
+         break;
+   }
+}
+
+function showPosition(position) {
+   var latlon = position.coords.latitude + ',' + position.coords.longitude;
+   var url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location="+latlon+"&output=json&pois=1"; 
+   $.ajax({
+      type: "GET",
+      dataType: "jsonp",
+      url: url,
+      beforeSend: function() {
+         $("#baidu_geo").val('正在定位...');
+      },
+      success: function(json) {
+         if (json.status == 0) {
+            var adslist_str = '';
+            $(json.result.pois).each(function(index, e) {
+               adslist_str += '<li onclick="addadsdetail(\''+json.result.addressComponent.province + ' ' + json.result.addressComponent.city + ' ' + json.result.addressComponent.district+'\',\''+e.addr+e.name+'\')"><div><span>' + e.name + '</span><span>' + e.addr + '</span></div><img src="https://qmzgcdn.boc7.net/jifen/index/img/listicon_in.png" alt=""></li>';
+            });
+            if (adslist_str) $('.poisdetail_list').html(adslist_str);
+
+            $("#poislist").show();
+            // $("#chose").val(json.result.addressComponent.province+' '+json.result.addressComponent.city+' '+json.result.addressComponent.district);
+            // $("#baidu_geo").val(json.result.addressComponent.street);
+            //$("#baidu_geo").val(JSON.stringify(json));
+            // $.ajax({
+            //    url: '/v1_test',
+            //    type: 'post',
+            //    data: json,
+            //    dataType: 'json',
+            //    success: function(value) {
+            //    }
+            // });
+         }
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+         $("#baidu_geo").val(latlon + "地址位置获取失败");
+      }
+   });
+}
+    </script>
