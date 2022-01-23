@@ -1,2 +1,2 @@
-百度地图api的实践项目
-地图上画圆寻找公交线路
+# 百度地图API部分功能的实践项目
+<div>地图上画圆寻找公交线路，功能在addregulation.html实现，其他页面内容可不看</div><div><br></div><div>1.在地图左上角定位城市，输入站台名搜索</div><div>利用百度地图的centerAndZoom方法定位到某一个城市，然后在输入框中搜索站点</div><div><br></div><div>2.通过站台名选择所需公交路线</div><div>利用BusLineSearch方法得到公交线路，其中的getBusList可以获取到所有的公交站点</div><div><br></div><div>3.在地图上选择需要限速的段落，输入速度</div><div>调用API的标注工具，在地图上圈选一块（ new BMapLib.DrawingManager），用折半法（zheban（））查找圆圈范围内的站点，找到后弹出弹框，输入限速</div>
